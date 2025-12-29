@@ -1,7 +1,7 @@
 
 import { Exam, ExamResult, User, Question } from '../types';
 
-const BASE_URL = 'http://localhost:8080/api';
+const BASE_URL = `${process.env.VITE_API_URL}/api`;
 
 /**
  * Utility to handle fetch responses and common error logic
