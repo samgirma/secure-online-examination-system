@@ -1,8 +1,8 @@
 
 import { Exam, ExamResult, User, Question } from '../types';
 
-const BASE_URL = `${process.env.VITE_API_URL}/api`;
-
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+console.log(BASE_URL);
 /**
  * Utility to handle fetch responses and common error logic
  */
