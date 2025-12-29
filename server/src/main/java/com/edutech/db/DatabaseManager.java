@@ -5,22 +5,26 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager {
     private static HikariDataSource dataSource;
+    private static String adminPasswd;
 
     public static void init() {
         // get data from envrimonet variable for production
         String url = System.getenv("DB_URL");
         String user = System.getenv("DB_USER");
         String pass = System.getenv("DB_PASSWORD");
+        String adminPasswd = System.getenv("Admin_passwd");
         
         // Default fallback for local development if env vars are missing
         if (url == null) url = "jdbc:mysql://localhost:3306/exam_system_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
         if (user == null) user = "root";
         if (pass == null) pass = "exam_system_passwd";
+        if (adminPasswd == null) adminPasswd = "admin123";
         
         HikariConfig config = new HikariConfig();
         // MySQL Configuration
@@ -67,13 +71,14 @@ public class DatabaseManager {
                     "id VARCHAR(36) PRIMARY KEY, " +
                     "exam_id VARCHAR(36), " +
                     "text TEXT, " +
-                    "correct_option_id VARCHAR(36), " +
+                    // "correct_option_id VARCHAR(36), " +
                     "FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE)");
 
             stmt.execute("CREATE TABLE IF NOT EXISTS options (" +
                     "id VARCHAR(36) PRIMARY KEY, " +
                     "question_id VARCHAR(36), " +
                     "text VARCHAR(255), " +
+                    "is_correct BOOLEAN DEFAULT FALSE, " +
                     "FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE)");
 
             stmt.execute("CREATE TABLE IF NOT EXISTS results (" +
@@ -92,7 +97,7 @@ public class DatabaseManager {
 
     private static void seedAdmin() {
         try (Connection conn = getConnection()) {
-            String hash = BCrypt.hashpw("admin123", BCrypt.gensalt());
+            String hash = BCrypt.hashpw(adminPasswd, BCrypt.gensalt());
             // MySQL "Insert Ignore" or "On Duplicate Key" logic
             String sql = "INSERT INTO users (id, username, password, role) " +
                          "VALUES ('admin-uuid', 'admin', ?, 'ADMIN') " +
