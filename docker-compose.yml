@@ -26,7 +26,7 @@ services:
       - "8080:8080"
     environment:
       - DB_URL=jdbc:mysql://db:3306/exam_system_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-      - DB_USER=root
+      - DB_USERNAME=root
       - DB_PASSWORD=exam_system_passwd
     depends_on:
       db:

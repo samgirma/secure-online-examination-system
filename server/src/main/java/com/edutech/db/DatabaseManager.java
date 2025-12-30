@@ -18,7 +18,7 @@ public class DatabaseManager {
         String url = System.getenv("DB_URL");
         String user = System.getenv("DB_USERNAME");        
         String pass = System.getenv("DB_PASSWORD");
-        String adminPasswd = System.getenv("Admin_passwd");
+        adminPasswd = System.getenv("Admin_passwd");
         
         // Default fallback for local development if env vars are missing
         if (url == null) {
@@ -26,7 +26,7 @@ public class DatabaseManager {
             user = "root";
             pass = "exam_system_passwd";
             adminPasswd = "admin123";
-        }      
+        }    
         HikariConfig config = new HikariConfig();
         // MySQL Configuration
         config.setJdbcUrl(url);
@@ -132,6 +132,7 @@ public class DatabaseManager {
             var ps = conn.prepareStatement(sql);
             ps.setString(1, hash);
             ps.executeUpdate();
+            System.out.println("password: "+adminPasswd); 
             System.out.println(">> Admin account checked.");
         } catch (Exception e) { 
             e.printStackTrace(); 
