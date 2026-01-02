@@ -26,7 +26,8 @@ public class DatabaseManager {
             user = "root";
             pass = "exam_system_passwd";
             adminPasswd = "admin123";
-        }    
+        }
+            
         HikariConfig config = new HikariConfig();
         // MySQL Configuration
         config.setJdbcUrl(url);
@@ -35,7 +36,7 @@ public class DatabaseManager {
 
         if (url.contains("mysql")) {
             config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            // FIX 2: Only add these for MySQL
+            // for MySQL only
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
